@@ -7,23 +7,26 @@ def main():
     github_api_url=os.environ["GITHUB_API_URL"]
     workflow_file = os.environ["INPUT_WORKFLOW_FILE"]
     repo=os.environ["INPUT_REPO"]
-    inputs=os.environ["INPUT_INPUTS"]
+    inputs=os.environ.get("INPUT_INPUTS", "{}")
     owner=os.environ["INPUT_OWNER"]
     branch=os.environ["INPUT_BRANCH"]
     token=os.environ["INPUT_TOKEN"]
 
-    headers={
-        "Authorization" : f"Bearer {token}",
-        "Accept"        : "application/vnd.github+json"
-    }
+    headers = {
+            "Authorization": f"Bearer {token}",
+            "Accept": "application/vnd.github+json",
+            "X-GitHub-Api-Version": "2022-11-28" # מומלץ להוסיף גרסה
+        }
     data = {
         "ref"       : f'{branch}',
         "inputs"    : f'{inputs}'
     }
 
-
+    url=f'{github_api_url}/repos/{owner}/{repo}/actions/workflows/{workflow_file}/dispatches'
+    
     try:
-        response = requests.post(f'{github_api_url}/repos/{owner}/{repo}/actions/workflows/{workflow_file}/dispatches',json=headers, data=data)
+        print(f"🚀 Triggering: {url}")
+        response = requests.post(f'{url}',json=headers, data=data)
         
         if response.status_code == 204:
             print("✅ Workflow triggered successfully!")
