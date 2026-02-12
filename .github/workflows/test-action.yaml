@@ -21,6 +21,7 @@ jobs:
         owner: ormbo
         branch: ${{ github.ref_name }}
         token: ${{ secrets.GITHUB_TOKEN }}
+        wait_until: true
 
     
     - name: print

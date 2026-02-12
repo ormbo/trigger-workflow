@@ -1,18 +1,18 @@
 import os
 import sys
 import requests
-import json  # noqa We are just importing this to prove the dependency installed correctly
+import json 
+import random
 
-
-def main():
+def set_env():
     github_api_url=os.environ["GITHUB_API_URL"]
-    workflow_file = os.environ["INPUT_WORKFLOW_FILE"]
+    workflow_file=os.environ["INPUT_WORKFLOW_FILE"]
     repo=os.environ["INPUT_REPO"]
-    inputs=os.environ.get("INPUT_INPUTS", "{}")
     owner=os.environ["INPUT_OWNER"]
     branch=os.environ["INPUT_BRANCH"]
     token=os.environ["INPUT_TOKEN"]
-    raw_inputs = os.environ.get("INPUT_INPUTS", "{}")
+    raw_inputs=os.environ.get("INPUT_INPUTS", "{}")
+    wait_until=os.environ("INPUT_WAIT_UNTIL")
 
     try:
         if not raw_inputs.strip():
@@ -22,12 +22,22 @@ def main():
     except json.JSONDecodeError:
         print(f"⚠️ Warning: input is not a valid JSON: {raw_inputs}")
         inputs = {}
-        
+
+    if wait_until == "true":
+        random_numbers = [random.randint(1, 100) for _ in range(8)]
+        print(f"Random integer: {random_numbers}")
+        trigger_workflow(github_api_url, workflow_file, repo, inputs, owner, branch, token,wait_until)
+    else:
+        trigger_workflow(github_api_url, workflow_file, repo, inputs, owner, branch, token)
+
+
+
+def trigger_workflow(github_api_url, workflow_file, repo, inputs, owner, branch, token):
     headers = {
             "Authorization": f"Bearer {token}",
             "Accept": "application/vnd.github+json",
-            "X-GitHub-Api-Version": "2022-11-28" # מומלץ להוסיף גרסה
-        }
+            "X-GitHub-Api-Version": "2022-11-28" 
+    }
     data = {
         "ref"       : branch,
         "inputs"    : inputs
@@ -52,8 +62,9 @@ def main():
 
     with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
         fh.write(f'myOutput={workflow_file}')
-
+    
+def wait_until();
+    print("TeST")
 
 if __name__ == "__main__":
-    main()
-
+    set_env()
