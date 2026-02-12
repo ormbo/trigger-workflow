@@ -15,7 +15,7 @@ jobs:
         repo: trigger-workflow
         owner: ormbo
         branch: ${{ github.ref_name }}
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.TRIGGER_SECRET }}
 
     
     - name: print
