@@ -22,7 +22,7 @@ def main():
 
 
     try:
-        response = requests.post(f'$GITHUB_API_URL/{owner}/{repo}/workflows/{workflow_file}/dispatches',json=headers, data=data)
+        response = requests.post(f'https://$GITHUB_API_URL/{owner}/{repo}/workflows/{workflow_file}/dispatches',json=headers, data=data)
         
         if response.status_code == 204:
             print("✅ Workflow triggered successfully!")
