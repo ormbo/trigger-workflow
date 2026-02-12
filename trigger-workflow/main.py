@@ -26,7 +26,7 @@ def main():
 
     try:
         print(f"🚀 Triggering: {url}")
-        response = requests.post(f'{url}',headers=headers, data=data)
+        response = requests.post(f'{url}',headers=headers, json=data)
         
         if response.status_code == 204:
             print("✅ Workflow triggered successfully!")
