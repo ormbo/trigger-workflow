@@ -6,6 +6,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: ormbo/trigger-workflow/blob/main/.github/action/action.yaml@main
+    - uses: ormbo/trigger-workflow/.github/action/action.yaml@main
       with:
         workflow_file: test
