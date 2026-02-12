@@ -15,9 +15,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 # 5. Copy Code
 COPY main.py .
 
-# 6. Security: Create a non-root user and switch to it
-RUN adduser -D appuser
-USER appuser
 
-# 7. Run
+# 6. Run
 ENTRYPOINT ["python", "/app/main.py"]
