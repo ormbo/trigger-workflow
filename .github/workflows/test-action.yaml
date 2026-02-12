@@ -10,6 +10,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: ormbo/trigger-workflow/.github/action@main
+    
+    - name: Trigger
+      id: Trigger
+      uses: ormbo/trigger-workflow/.github/action@main
       with:
         workflow_file: ${{ inputs.workflow_file }}
+    
+    - name: print
+      run:
+        echo '${{ steps.Trigger.outputs.myOutput }}'
