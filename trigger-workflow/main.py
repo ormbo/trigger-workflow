@@ -23,10 +23,10 @@ def main():
     }
 
     url=f'{github_api_url}/repos/{owner}/{repo}/actions/workflows/{workflow_file}/dispatches'
-    
+
     try:
         print(f"🚀 Triggering: {url}")
-        response = requests.post(f'{url}',json=headers, data=data)
+        response = requests.post(f'{url}',headers=headers, data=data)
         
         if response.status_code == 204:
             print("✅ Workflow triggered successfully!")
