@@ -1,6 +1,10 @@
 name: Test workflow
 on:
     workflow_dispatch:
+        inputs:
+            workflow_file:
+                description: 'Test the workflow'
+                
 
 jobs:
   build:
