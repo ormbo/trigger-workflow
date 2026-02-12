@@ -28,7 +28,7 @@ inputs:
 
 runs:
   using: 'docker'
-  image: 'docker://ghcr.io/ormbo/my-action:latest'
+  image: 'docker://ghcr.io/ormbo/trigger-workflow:latest'
 
   args:
     - ${{ inputs.workflow_file }}

@@ -3,6 +3,8 @@ name: Build and Push Action Image
 on:
     push:
         branches: ['main']
+        paths:
+            - 'trigger-workflow'
     workflow_dispatch:
 
 env:
