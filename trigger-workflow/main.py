@@ -1,6 +1,7 @@
 import os
 import sys
-import requests  # noqa We are just importing this to prove the dependency installed correctly
+import requests
+import json  # noqa We are just importing this to prove the dependency installed correctly
 
 
 def main():
@@ -11,7 +12,17 @@ def main():
     owner=os.environ["INPUT_OWNER"]
     branch=os.environ["INPUT_BRANCH"]
     token=os.environ["INPUT_TOKEN"]
+    raw_inputs = os.environ.get("INPUT_INPUTS", "{}")
 
+    try:
+        if not raw_inputs.strip():
+            inputs = {}
+        else:
+            inputs = json.loads(raw_inputs)
+    except json.JSONDecodeError:
+        print(f"⚠️ Warning: input is not a valid JSON: {raw_inputs}")
+        inputs = {}
+        
     headers = {
             "Authorization": f"Bearer {token}",
             "Accept": "application/vnd.github+json",
