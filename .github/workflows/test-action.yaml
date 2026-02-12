@@ -12,7 +12,7 @@ jobs:
       uses: ormbo/trigger-workflow/.github/action@main
       with:
         workflow_file: trigger_by.yml
-        repo: ${{ github.repository }}
+        repo: trigger-workflow
         owner: ormbo
         branch: ${{ github.ref_name }}
         token: ${{ secrets.GITHUB_TOKEN }}
