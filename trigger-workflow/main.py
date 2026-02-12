@@ -4,6 +4,7 @@ import requests  # noqa We are just importing this to prove the dependency insta
 
 
 def main():
+    github_api_url=os.environ["GITHUB_API_URL"]
     workflow_file = os.environ["INPUT_WORKFLOW_FILE"]
     repo=os.environ["INPUT_REPO"]
     inputs=os.environ["INPUT_INPUTS"]
@@ -22,7 +23,7 @@ def main():
 
 
     try:
-        response = requests.post(f'https://$GITHUB_API_URL/{owner}/{repo}/workflows/{workflow_file}/dispatches',json=headers, data=data)
+        response = requests.post(f'https://{github_api_url}/{owner}/{repo}/workflows/{workflow_file}/dispatches',json=headers, data=data)
         
         if response.status_code == 204:
             print("✅ Workflow triggered successfully!")
