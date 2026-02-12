@@ -20,4 +20,4 @@ RUN adduser -D appuser
 USER appuser
 
 # 7. Run
-ENTRYPOINT ["python", "main.py"]
+ENTRYPOINT ["python", "/app/main.py"]

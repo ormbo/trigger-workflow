@@ -34,8 +34,8 @@ runs:
 
   args:
     - ${{ inputs.workflow_file }}
-    - ${{ inputs.inputs }}
-    - ${{ inputs.repo }}
-    - ${{ inputs.owner }}
-    - ${{ inputs.branch }}
-    - ${{ inputs.token }}
+    # - ${{ inputs.inputs }}
+    # - ${{ inputs.repo }}
+    # - ${{ inputs.owner }}
+    # - ${{ inputs.branch }}
+    # - ${{ inputs.token }}
