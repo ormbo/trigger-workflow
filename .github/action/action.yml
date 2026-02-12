@@ -6,36 +6,36 @@ inputs:
   workflow_file: 
     description: 'The workflow file'
     required: true
-#   inputs:
-#     required: false
-#     description: 'Send inputs to the workflow'
-#   repo:
-#     required: true
-#     description: 'Repo name'
-#   owner:
-#     required: true
-#     description: 'The owner of the repo'
-#   branch:
-#     required: true
-#     default: 'main'
-#     description: 'The branch that the workflow exists'
-#   token:
-#     required: true
-#     description: 'Token with permissions to trigger the workflow'
-# outputs:
-#   runner-id:
-#     description: "The runner id of the trigger workflow"
+  inputs:
+    required: false
+    description: 'Send inputs to the workflow'
+  repo:
+    required: true
+    description: 'Repo name'
+  owner:
+    required: true
+    description: 'The owner of the repo'
+  branch:
+    required: true
+    default: 'main'
+    description: 'The branch that the workflow exists'
+  token:
+    required: true
+    description: 'Token with permissions to trigger the workflow'
+
 outputs:
   myOutput:
     description: 'some output'
+  runner-id:
+    description: "The runner id of the trigger workflow"
 runs:
   using: 'docker'
   image: 'docker://ghcr.io/ormbo/trigger-workflow:latest'
 
   args:
     - ${{ inputs.workflow_file }}
-    # - ${{ inputs.inputs }}
-    # - ${{ inputs.repo }}
-    # - ${{ inputs.owner }}
-    # - ${{ inputs.branch }}
-    # - ${{ inputs.token }}
+    - ${{ inputs.inputs }}
+    - ${{ inputs.repo }}
+    - ${{ inputs.owner }}
+    - ${{ inputs.branch }}
+    - ${{ inputs.token }}
