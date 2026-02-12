@@ -25,7 +25,9 @@ inputs:
 # outputs:
 #   runner-id:
 #     description: "The runner id of the trigger workflow"
-
+outputs:
+  myOutput:
+    description: 'some output'
 runs:
   using: 'docker'
   image: 'docker://ghcr.io/ormbo/trigger-workflow:latest'
