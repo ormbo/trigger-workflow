@@ -1,0 +1,11 @@
+name: Test workflow
+on:
+    workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: .github/action/action.yaml
+      with:
+        workflow_file: test
