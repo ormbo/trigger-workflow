@@ -2,11 +2,16 @@ name: Test workflow
 on:
     workflow_dispatch:
 
+
+permissions:
+  actions: write
+  contents: read
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    
+
+
     - name: Trigger
       id: Trigger
       uses: ormbo/trigger-workflow/.github/action@main
@@ -15,7 +20,7 @@ jobs:
         repo: trigger-workflow
         owner: ormbo
         branch: ${{ github.ref_name }}
-        token: ${{ secrets.TRIGGER_SECRET }}
+        token: ${{ secrets.GITHUB_TOKEN }}
 
     
     - name: print
