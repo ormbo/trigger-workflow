@@ -29,8 +29,8 @@ def main():
             "X-GitHub-Api-Version": "2022-11-28" # מומלץ להוסיף גרסה
         }
     data = {
-        "ref"       : f'{branch}',
-        "inputs"    : f'{inputs}'
+        "ref"       : branch,
+        "inputs"    : inputs
     }
 
     url=f'{github_api_url}/repos/{owner}/{repo}/actions/workflows/{workflow_file}/dispatches'
