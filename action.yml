@@ -29,11 +29,6 @@ inputs:
     required: false
     description: 'Correlation ID for tracking the workflow run'
 
-outputs:
-  myOutput:
-    description: 'some output'
-  runner-id:
-    description: "The runner id of the trigger workflow"
 runs:
   using: 'docker'
   image: 'docker://ghcr.io/ormbo/trigger-workflow:latest'

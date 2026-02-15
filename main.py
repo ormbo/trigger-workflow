@@ -113,7 +113,7 @@ def wait_for_workflow_completion(github_api_url, workflow_file, owner, repo, bra
         print("❌ Timeout: Could not find the workflow run.")
         sys.exit(1)
 
-    print(f"🚀 Tracking status for Run ID: {target_run_id}")
+    print(f"👀 Tracking status for Run ID: {target_run_id}")
     
     while True:
         status_url = f"{github_api_url}/repos/{owner}/{repo}/actions/runs/{target_run_id}"
