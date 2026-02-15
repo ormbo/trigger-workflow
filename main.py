@@ -134,7 +134,7 @@ def wait_for_workflow_completion(github_api_url, workflow_file, owner, repo, bra
                 print(f"❌ Workflow failed with conclusion: {conclusion}")
                 sys.exit(1)
         
-        time.sleep(5)
+        time.sleep(10)
 
 if __name__ == "__main__":
     set_env()
