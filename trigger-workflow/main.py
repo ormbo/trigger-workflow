@@ -13,7 +13,7 @@ def set_env():
     token=os.environ["INPUT_TOKEN"]
     raw_inputs=os.environ.get("INPUT_INPUTS", "{}")
     wait_until=os.environ.get("INPUT_WAIT_UNTIL", "false")
-    
+
     try:
         if not raw_inputs.strip():
             inputs = {}
@@ -24,7 +24,7 @@ def set_env():
         inputs = {}
 
     if wait_until == "true":
-        random_numbers = [random.randint(1, 100) for _ in range(8)]
+        random_numbers = random.randint(10000000, 99999999)
         print(f"Random integer: {random_numbers}")
         inputs["CorrelationID"] = random_numbers
         trigger_workflow(github_api_url, workflow_file, repo, inputs, owner, branch, token)

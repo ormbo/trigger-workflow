@@ -26,12 +26,13 @@ on:
         required: false
         default: false
         type: boolean
-        
+
       CorrelationID:
         description: 'Correlation ID for tracking'
         required: false
         default: ''
         type: string
+        
 jobs:
   process-inputs:
     runs-on: ubuntu-latest
