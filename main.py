@@ -66,7 +66,7 @@ def trigger_workflow(github_api_url, workflow_file, repo, inputs, owner, branch,
         sys.exit(1)
 
     if wait_until_complete == "true":
-        wait_for_workflow_completion(github_api_url, workflow_file, owner, repo, branch, token, inputs["CorrelationID"])
+        wait_for_workflow_completion(github_api_url, workflow_file, owner, repo, branch, token, inputs["correlation_id"])
     else:
         trigger_workflow(github_api_url, workflow_file, repo, inputs, owner, branch, token)
 
