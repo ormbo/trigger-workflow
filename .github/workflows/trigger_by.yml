@@ -30,8 +30,7 @@ on:
       CorrelationID:
         description: 'Correlation ID for tracking'
         required: false
-        default: ''
-        type: string
+        type: number
 
 jobs:
   process-inputs:
