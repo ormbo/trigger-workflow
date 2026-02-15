@@ -1,4 +1,4 @@
-name: 'Trigger Workflow'
+name: 'Trigger Workflow and Wait for Completion'
 description: Trigger a GitHub workflow and optionally wait for it to complete
 author: "Or Moshe Bohadana"
 
