@@ -98,7 +98,7 @@ def wait_for_workflow_completion(github_api_url, workflow_file,  owner, repo, to
                 print(f"✅ Found Run ID: {target_run_id}")
                 break
                 
-        if not target_run_id:
+    if not target_run_id:
             print("❌ Could not find the workflow run.")
             sys.exit(1)
 
