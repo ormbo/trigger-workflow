@@ -1,5 +1,5 @@
-name: 'Tr'
-description: Greet someone and record the time
+name: 'Trigger Workflow'
+description: Trigger a GitHub workflow and optionally wait for it to complete
 author: "Or Moshe Bohadana"
 
 inputs:
