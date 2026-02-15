@@ -45,9 +45,11 @@ jobs:
       - name: Test Debug Mode
         shell: python
         run: |
+          import time
+
           while True:
               print("Running workflow... ")
-              sleep(5)
+              time.sleep(5)
               print("Running workflow... ")
               sleep(5)
               break
