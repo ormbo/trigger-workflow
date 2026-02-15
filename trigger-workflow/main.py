@@ -28,13 +28,13 @@ def set_env():
         print(f"Random integer: {random_numbers}")
         inputs["CorrelationID"] = f'{random_numbers}'
         print(inputs)
-        trigger_workflow(github_api_url, workflow_file, repo, inputs, owner, branch, token)
+        trigger_workflow(github_api_url, workflow_file, repo, inputs, owner, branch, token, wait_until)
     else:
         trigger_workflow(github_api_url, workflow_file, repo, inputs, owner, branch, token)
 
 
 
-def trigger_workflow(github_api_url, workflow_file, repo, inputs, owner, branch, token):
+def trigger_workflow(github_api_url, workflow_file, repo, inputs, owner, branch, token, wait_until):
     headers = {
             "Authorization": f"Bearer {token}",
             "Accept": "application/vnd.github+json",
@@ -62,9 +62,38 @@ def trigger_workflow(github_api_url, workflow_file, repo, inputs, owner, branch,
         print(f"❌ Error sending request: {e}")
         sys.exit(1)
 
-    with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
-        fh.write(f'myOutput={workflow_file}')
-    
+    if wait_until == "true":
+        wait_for_workflow_completion(github_api_url, owner, repo, token, inputs["CorrelationID"])
+    else:
+        trigger_workflow(github_api_url, workflow_file, repo, inputs, owner, branch, token)
+
+    # with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
+    #     fh.write(f'myOutput={workflow_file}')
+
+def wait_for_workflow_completion(github_api_url, owner, repo, token, correlation_id):
+        
+        url=f'{github_api_url}/repos/{owner}/{repo}/actions/runs/?event=workflow_dispatch&status=in_progress||queued||waiting'
+
+        headers = {
+            "Authorization": f"Bearer {token}",
+            "Accept": "application/vnd.github+json",
+            "X-GitHub-Api-Version": "2022-11-28" 
+        }
+
+        try:
+            print(f"🚀 Waiting for finish: {url}")
+            response = requests.get(f'{url}',headers=headers)
+            
+            if response.status_code == 200:
+                print("✅ Workflow completed successfully!")
+                print(f"Response: {response.text}")
+            else:
+                print(f"❌ Failed to complete workflow. Status: {response.status_code}")
+                print(f"Response: {response.text}")
+                sys.exit(1)
+        except requests.exceptions.RequestException as e:
+            print(f"❌ Error sending request: {e}")
+            sys.exit(1)
 
 if __name__ == "__main__":
     set_env()
