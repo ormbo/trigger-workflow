@@ -32,7 +32,7 @@ on:
         required: false
         default: ''
         type: string
-        
+
 jobs:
   process-inputs:
     runs-on: ubuntu-latest
