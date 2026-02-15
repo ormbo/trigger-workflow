@@ -3,6 +3,7 @@ import sys
 import requests
 import json 
 import random
+import time
 
 def set_env():
     github_api_url=os.environ["GITHUB_API_URL"]
@@ -63,37 +64,64 @@ def trigger_workflow(github_api_url, workflow_file, repo, inputs, owner, branch,
         sys.exit(1)
 
     if wait_until == "true":
-        wait_for_workflow_completion(github_api_url, owner, repo, token, inputs["CorrelationID"])
+        wait_for_workflow_completion(github_api_url, workflow_file, owner, repo, token, inputs["CorrelationID"])
     else:
         trigger_workflow(github_api_url, workflow_file, repo, inputs, owner, branch, token)
 
     # with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
     #     fh.write(f'myOutput={workflow_file}')
 
-def wait_for_workflow_completion(github_api_url, owner, repo, token, correlation_id):
-        
-        url=f'{github_api_url}/repos/{owner}/{repo}/actions/runs/?event=workflow_dispatch&status=in_progress||queued||waiting'
+def wait_for_workflow_completion(github_api_url, workflow_file,  owner, repo, token, correlation_id):
 
-        headers = {
+    headers = {
             "Authorization": f"Bearer {token}",
             "Accept": "application/vnd.github+json",
             "X-GitHub-Api-Version": "2022-11-28" 
-        }
-
-        try:
-            print(f"🚀 Waiting for finish: {url}")
-            response = requests.get(f'{url}',headers=headers)
+    }  
+    for attempt in range(10):
+            time.sleep(2)
             
-            if response.status_code == 200:
-                print("✅ Workflow completed successfully!")
-                print(f"Response: {response.text}")
-            else:
-                print(f"❌ Failed to complete workflow. Status: {response.status_code}")
-                print(f"Response: {response.text}")
-                sys.exit(1)
-        except requests.exceptions.RequestException as e:
-            print(f"❌ Error sending request: {e}")
+            # Get the list of recent runs for this workflow
+            list_url = f"{github_api_url}/repos/{owner}/{repo}/actions/workflows/{workflow_file}/runs"
+            # We only need the top 5 most recent runs to be safe
+            resp = requests.get(list_url, headers=headers, params={"per_page": 7, "event": "workflow_dispatch"})
+            runs = resp.json().get("workflow_runs", [])
+
+            for run in runs:
+                print(f"🔍 Checking Run ID: {run['id']} - CorrelationID: {run['name']}")
+                print(run)
+                pass 
+                target_run_id = runs[0]['id']
+                break
+            
+            if target_run_id:
+                print(f"✅ Found Run ID: {target_run_id}")
+                break
+                
+        if not target_run_id:
+            print("❌ Could not find the workflow run.")
             sys.exit(1)
+
+        # 4. Wait for Completion
+    while True:
+            status_url = f"{github_api_url}/repos/{owner}/{repo}/actions/runs/{target_run_id}"
+            resp = requests.get(status_url, headers=headers)
+            data = resp.json()
+            
+            status = data['status']       # queued, in_progress, completed
+            conclusion = data['conclusion'] # success, failure
+            
+            print(f"⏳ Status: {status}")
+            
+            if status == "completed":
+                if conclusion == "success":
+                    print("✅ Success!")
+                    return
+                else:
+                    print(f"❌ Failed with status: {conclusion}")
+                    sys.exit(1)
+                    
+            time.sleep(5)
 
 if __name__ == "__main__":
     set_env()
