@@ -26,7 +26,8 @@ def set_env():
     if wait_until == "true":
         random_numbers = [random.randint(1, 100) for _ in range(8)]
         print(f"Random integer: {random_numbers}")
-        trigger_workflow(github_api_url, workflow_file, repo, inputs, owner, branch, token,wait_until)
+        inputs["CorrelationID"] = random_numbers
+        trigger_workflow(github_api_url, workflow_file, repo, inputs, owner, branch, token)
     else:
         trigger_workflow(github_api_url, workflow_file, repo, inputs, owner, branch, token)
 
@@ -63,8 +64,6 @@ def trigger_workflow(github_api_url, workflow_file, repo, inputs, owner, branch,
     with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
         fh.write(f'myOutput={workflow_file}')
     
-def wait_until();
-    print("TeST")
 
 if __name__ == "__main__":
     set_env()

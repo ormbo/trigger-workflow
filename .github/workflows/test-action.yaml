@@ -19,6 +19,7 @@ jobs:
         workflow_file: trigger_by.yml
         repo: trigger-workflow
         owner: ormbo
+        inputs: '{"target_user": "Or", "environment": "dev", "debug_mode": true}'
         branch: ${{ github.ref_name }}
         token: ${{ secrets.GITHUB_TOKEN }}
         wait_until: true

@@ -1,24 +1,48 @@
-name: Trigger BY
+name: Manual Input Demo
+
 on:
-    workflow_dispatch:
-
-
+  workflow_dispatch:
+    inputs:
+      # 1. String Input
+      target_user:
+        description: 'Who are we greeting?'
+        required: true
+        default: 'World'
+        type: string
+      
+      # 2. Choice/Dropdown Input
+      environment:
+        description: 'Select Environment'
+        required: true
+        type: choice
+        options:
+          - dev
+          - staging
+          - prod
+      
+      # 3. Boolean/Checkbox Input
+      debug_mode:
+        description: 'Enable Debug Logs?'
+        required: false
+        default: false
+        type: boolean
+        
+      CorrelationID:
+        description: 'Correlation ID for tracking'
+        required: false
+        default: ''
+        type: string
 jobs:
-  build:
+  process-inputs:
     runs-on: ubuntu-latest
     steps:
-    
-        
-    
-    - name: print
-      run: | 
-            DURATION=300 
-            END_TIME=$((SECONDS + DURATION))
+      - name: Print Inputs
+        run: |
+          echo "👋 Hello, ${{ inputs.target_user }}!"
+          echo "🌍 Environment selected: ${{ inputs.environment }}"
+          echo "🐛 Debug Mode status: ${{ inputs.debug_mode }}"
 
-            echo "Loop starting at $(date +%T) for $DURATION seconds."
-
-            while [ $SECONDS -lt $END_TIME ]; do
-                echo "Executing command at $(date +%T)" 
-            done
-
-            echo "Loop finished at $(date +%T)."
+      - name: Conditional Logic Example
+        if: ${{ inputs.environment == 'prod' && inputs.debug_mode == true }}
+        run: |
+          echo "⚠️ WARNING: You are running DEBUG mode in PROD!"
