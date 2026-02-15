@@ -51,5 +51,5 @@ jobs:
               print("Running workflow... ")
               time.sleep(5)
               print("Running workflow... ")
-              sleep(5)
+              time.sleep(5)
               break
