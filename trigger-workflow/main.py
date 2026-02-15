@@ -88,8 +88,9 @@ def wait_for_workflow_completion(github_api_url, workflow_file,  owner, repo, to
             runs = resp.json().get("workflow_runs", [])
 
             for run in runs:
-                print(f"🔍 Checking Run ID: {run['id']} - CorrelationID: {run['name']}")
-                print(run)
+                if run['id'] == correlation_id:
+                    print(f"🔍 Found matching Run ID: {run['id']} - CorrelationID: {run['name']}")
+                    print(run)
                 pass 
                 target_run_id = runs[0]['id']
                 break
