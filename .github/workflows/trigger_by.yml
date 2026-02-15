@@ -1,4 +1,5 @@
 name: Manual Input Demo
+run-name: Workflow - ${{ inputs.CorrelationID}}
 
 on:
   workflow_dispatch:
