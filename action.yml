@@ -25,7 +25,7 @@ inputs:
   token:
     required: true
     description: 'Token with permissions to trigger the workflow'
-  wait_until:
+  wait_until_complete:
     required: false
     description: 'Wait until the workflow is finished'
   correlation_id:
@@ -43,5 +43,5 @@ runs:
     - ${{ inputs.owner }}
     - ${{ inputs.branch }}
     - ${{ inputs.token }}
-    - ${{ inputs.wait_until }}
+    - ${{ inputs.wait_until_complete }}
     - ${{ inputs.correlation_id }}

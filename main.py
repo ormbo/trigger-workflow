@@ -13,7 +13,7 @@ def set_env():
     branch=os.environ["INPUT_BRANCH"]
     token=os.environ["INPUT_TOKEN"]
     raw_inputs=os.environ.get("INPUT_INPUTS", "{}")
-    wait_until=os.environ.get("INPUT_WAIT_UNTIL", "false")
+    wait_until_complete=os.environ.get("INPUT_WAIT_UNTIL_COMPLETE", "false")
     correlation_id=os.environ.get("INPUT_CORRELATION_ID")
 
     try:
@@ -25,22 +25,22 @@ def set_env():
         print(f"⚠️ Warning: input is not a valid JSON: {raw_inputs}")
         inputs = {}
 
-    if wait_until == "true" and not correlation_id:
+    if wait_until_complete == "true" and not correlation_id:
         random_numbers = random.randint(10000000, 99999999)
         print(f"Random integer: {random_numbers}")
         inputs["CorrelationID"] = f'{random_numbers}'
         print(inputs)
-        trigger_workflow(github_api_url, workflow_file, repo, inputs, owner, branch, token, wait_until)
-    elif wait_until == "true" and correlation_id:
+        trigger_workflow(github_api_url, workflow_file, repo, inputs, owner, branch, token, wait_until_complete)
+    elif wait_until_complete == "true" and correlation_id:
         inputs["CorrelationID"] = correlation_id
         print(inputs)
-        trigger_workflow(github_api_url, workflow_file, repo, inputs, owner, branch, token, wait_until)
+        trigger_workflow(github_api_url, workflow_file, repo, inputs, owner, branch, token, wait_until_complete)
     else:
         trigger_workflow(github_api_url, workflow_file, repo, inputs, owner, branch, token)
 
 
 
-def trigger_workflow(github_api_url, workflow_file, repo, inputs, owner, branch, token, wait_until):
+def trigger_workflow(github_api_url, workflow_file, repo, inputs, owner, branch, token, wait_until_complete):
     headers = {
             "Authorization": f"Bearer {token}",
             "Accept": "application/vnd.github+json",
@@ -68,7 +68,7 @@ def trigger_workflow(github_api_url, workflow_file, repo, inputs, owner, branch,
         print(f"❌ Error sending request: {e}")
         sys.exit(1)
 
-    if wait_until == "true":
+    if wait_until_complete == "true":
         wait_for_workflow_completion(github_api_url, workflow_file, owner, repo, branch, token, inputs["CorrelationID"])
     else:
         trigger_workflow(github_api_url, workflow_file, repo, inputs, owner, branch, token)
