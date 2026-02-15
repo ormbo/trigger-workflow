@@ -12,8 +12,8 @@ def set_env():
     branch=os.environ["INPUT_BRANCH"]
     token=os.environ["INPUT_TOKEN"]
     raw_inputs=os.environ.get("INPUT_INPUTS", "{}")
-    wait_until=os.environ("INPUT_WAIT_UNTIL")
-
+    wait_until=os.environ.get("INPUT_WAIT_UNTIL", "false")
+    
     try:
         if not raw_inputs.strip():
             inputs = {}
