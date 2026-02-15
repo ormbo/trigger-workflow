@@ -26,7 +26,7 @@ def set_env():
     if wait_until == "true":
         random_numbers = random.randint(10000000, 99999999)
         print(f"Random integer: {random_numbers}")
-        inputs["CorrelationID"] = random_numbers
+        inputs["CorrelationID"] = f'{random_numbers}'
         print(inputs)
         trigger_workflow(github_api_url, workflow_file, repo, inputs, owner, branch, token)
     else:

@@ -30,8 +30,7 @@ on:
       CorrelationID:
         description: 'Correlation ID for tracking'
         required: false
-        type: number
-
+        type: string
 jobs:
   process-inputs:
     runs-on: ubuntu-latest
