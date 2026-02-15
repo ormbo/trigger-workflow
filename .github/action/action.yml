@@ -25,6 +25,9 @@ inputs:
   wait_until:
     required: false
     description: 'Wait until the workflow is finished'
+  correlation_id:
+    required: false
+    description: 'Correlation ID for tracking the workflow run'
 
 outputs:
   myOutput:
@@ -43,3 +46,4 @@ runs:
     - ${{ inputs.branch }}
     - ${{ inputs.token }}
     - ${{ inputs.wait_until }}
+    - ${{ inputs.correlation_id }}

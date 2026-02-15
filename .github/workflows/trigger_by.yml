@@ -42,7 +42,12 @@ jobs:
           echo "🌍 Environment selected: ${{ inputs.environment }}"
           echo "🐛 Debug Mode status: ${{ inputs.debug_mode }}"
 
-      - name: Conditional Logic Example
-        if: ${{ inputs.environment == 'prod' && inputs.debug_mode == true }}
+      - name: Test Debug Mode
+        shell: python
         run: |
-          echo "⚠️ WARNING: You are running DEBUG mode in PROD!"
+          while True:
+              print("Running workflow... ")
+              sleep(5)
+              print("Running workflow... ")
+              sleep(5)
+              break

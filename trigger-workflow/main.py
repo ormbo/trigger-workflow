@@ -14,6 +14,7 @@ def set_env():
     token=os.environ["INPUT_TOKEN"]
     raw_inputs=os.environ.get("INPUT_INPUTS", "{}")
     wait_until=os.environ.get("INPUT_WAIT_UNTIL", "false")
+    correlation_id=os.environ("INPUT_CORRELATION_ID")
 
     try:
         if not raw_inputs.strip():
@@ -24,10 +25,14 @@ def set_env():
         print(f"⚠️ Warning: input is not a valid JSON: {raw_inputs}")
         inputs = {}
 
-    if wait_until == "true":
+    if wait_until == "true" and not correlation_id:
         random_numbers = random.randint(10000000, 99999999)
         print(f"Random integer: {random_numbers}")
         inputs["CorrelationID"] = f'{random_numbers}'
+        print(inputs)
+        trigger_workflow(github_api_url, workflow_file, repo, inputs, owner, branch, token, wait_until)
+    elif wait_until == "true" and correlation_id:
+        inputs["CorrelationID"] = correlation_id
         print(inputs)
         trigger_workflow(github_api_url, workflow_file, repo, inputs, owner, branch, token, wait_until)
     else:
@@ -64,14 +69,12 @@ def trigger_workflow(github_api_url, workflow_file, repo, inputs, owner, branch,
         sys.exit(1)
 
     if wait_until == "true":
-        wait_for_workflow_completion(github_api_url, workflow_file, owner, repo, token, inputs["CorrelationID"])
+        wait_for_workflow_completion(github_api_url, workflow_file, owner, repo, branch, token, inputs["CorrelationID"])
     else:
         trigger_workflow(github_api_url, workflow_file, repo, inputs, owner, branch, token)
 
-    # with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
-    #     fh.write(f'myOutput={workflow_file}')
 
-def wait_for_workflow_completion(github_api_url, workflow_file, owner, repo, token, correlation_id):
+def wait_for_workflow_completion(github_api_url, workflow_file, owner, repo, branch, token, correlation_id):
     headers = {
         "Authorization": f"Bearer {token}",
         "Accept": "application/vnd.github+json",
@@ -83,38 +86,33 @@ def wait_for_workflow_completion(github_api_url, workflow_file, owner, repo, tok
 
     print(f"🔍 Searching for run with Name: {correlation_id}...")
 
-    # 1. FIND THE RUN (with retries)
     for attempt in range(15):  # Try for 30 seconds (15 * 2s)
         time.sleep(2)
         
-        # Get recent runs triggered by 'workflow_dispatch'
+
         try:
-            resp = requests.get(list_url, headers=headers, params={"per_page": 10, "event": "workflow_dispatch"})
+            resp = requests.get(list_url, headers=headers, params={"per_page": 10, "event": "workflow_dispatch", "branch":f'{branch}'})
             resp.raise_for_status() # Check for HTTP errors
             runs = resp.json().get("workflow_runs", [])
         except Exception as e:
             print(f"⚠️ API Error: {e}")
             continue
 
-        # Look for the specific correlation ID in the run name
         for run in runs:
-            # We use 'in' because sometimes GitHub adds a prefix or suffix
             if correlation_id in run['name'] or correlation_id in run['display_title']:
                 target_run_id = run['id']
                 print(f"✅ Found matching Run ID: {target_run_id}")
-                break  # Break the inner loop (run search)
+                break 
         
         if target_run_id:
-            break  # Break the outer loop (retries)
+            break
         
         print(f"   Attempt {attempt+1}: Run not found yet...")
 
-    # Check if we failed to find it after all retries
     if not target_run_id:
         print("❌ Timeout: Could not find the workflow run.")
         sys.exit(1)
 
-    # 2. WAIT FOR COMPLETION
     print(f"🚀 Tracking status for Run ID: {target_run_id}")
     
     while True:
@@ -126,8 +124,8 @@ def wait_for_workflow_completion(github_api_url, workflow_file, owner, repo, tok
             sys.exit(1)
             
         data = resp.json()
-        status = data.get('status')       # queued, in_progress, completed
-        conclusion = data.get('conclusion') # success, failure, cancelled
+        status = data.get('status')
+        conclusion = data.get('conclusion')
         
         print(f"⏳ Status: {status}")
 

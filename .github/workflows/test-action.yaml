@@ -23,6 +23,7 @@ jobs:
         branch: ${{ github.ref_name }}
         token: ${{ secrets.GITHUB_TOKEN }}
         wait_until: true
+        correlation_id: ${{ github.run_id }}
 
     
     - name: print
