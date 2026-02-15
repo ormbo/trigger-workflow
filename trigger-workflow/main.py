@@ -14,7 +14,7 @@ def set_env():
     token=os.environ["INPUT_TOKEN"]
     raw_inputs=os.environ.get("INPUT_INPUTS", "{}")
     wait_until=os.environ.get("INPUT_WAIT_UNTIL", "false")
-    correlation_id=os.environ("INPUT_CORRELATION_ID")
+    correlation_id=os.environ.get("INPUT_CORRELATION_ID")
 
     try:
         if not raw_inputs.strip():
