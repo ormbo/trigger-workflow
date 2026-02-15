@@ -28,9 +28,9 @@ def set_env():
     if wait_until_complete == "true" and not correlation_id:
         print("⚠️ No CorrelationID provided. Generating a random one for tracking...")
         random_numbers = random.randint(10000000, 99999999)
-        inputs["CorrelationID"] = f'{random_numbers}'
+        inputs["correlation_id"] = f'{random_numbers}'
     elif wait_until_complete == "true" and correlation_id:
-        inputs["CorrelationID"] = correlation_id
+        inputs["correlation_id"] = correlation_id
         print(f"🔖 Using provided CorrelationID: {correlation_id} for tracking.")
 
     trigger_workflow(github_api_url, workflow_file, repo, inputs, owner, branch, token, wait_until_complete)
